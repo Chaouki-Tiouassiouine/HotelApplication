@@ -22,21 +22,12 @@ namespace HotelApplication.Controllers
         // GET: Booking
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Booking.ToListAsync());
+            var applicationDbContext = _context.Booking.Include(b => b.Guest).Include(b => b.Room);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        //var booking = from r in _context.Booking
-        //              select r;
-
-        //        if (!String.IsNullOrEmpty(searchString))
-        //        {
-        //            booking = booking.Where(s => s.BookingID.Contains(searchString));
-        //        }
-
-        //        return View(await booking.ToListAsync());
-
-    // GET: Booking/Details/5
-    public async Task<IActionResult> Details(int? id)
+        // GET: Booking/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -44,6 +35,8 @@ namespace HotelApplication.Controllers
             }
 
             var booking = await _context.Booking
+                .Include(b => b.Guest)
+                .Include(b => b.Room)
                 .SingleOrDefaultAsync(m => m.BookingID == id);
             if (booking == null)
             {
@@ -56,6 +49,8 @@ namespace HotelApplication.Controllers
         // GET: Booking/Create
         public IActionResult Create()
         {
+            ViewData["GuestId"] = new SelectList(_context.Users, "Id", "UserName");
+            ViewData["RoomID"] = new SelectList(_context.Room, "RoomID", "RoomName");
             return View();
         }
 
@@ -64,7 +59,7 @@ namespace HotelApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookingID,RoomID,PaidBooking,StartDate,EndTime")] Booking booking)
+        public async Task<IActionResult> Create([Bind("BookingID,RoomID,GuestId,PaidBooking,StartDate,EndTime")] Booking booking)
         {
             if (ModelState.IsValid)
             {
@@ -72,6 +67,8 @@ namespace HotelApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["GuestId"] = new SelectList(_context.Users, "Id", "Id", booking.GuestId);
+            ViewData["RoomID"] = new SelectList(_context.Room, "RoomID", "RoomID", booking.RoomID);
             return View(booking);
         }
 
@@ -88,6 +85,8 @@ namespace HotelApplication.Controllers
             {
                 return NotFound();
             }
+            ViewData["GuestId"] = new SelectList(_context.Users, "Id", "Id", booking.GuestId);
+            ViewData["RoomID"] = new SelectList(_context.Room, "RoomID", "RoomID", booking.RoomID);
             return View(booking);
         }
 
@@ -96,7 +95,7 @@ namespace HotelApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookingID,RoomID,PaidBooking,StartDate,EndTime")] Booking booking)
+        public async Task<IActionResult> Edit(int id, [Bind("BookingID,RoomID,GuestId,PaidBooking,StartDate,EndTime")] Booking booking)
         {
             if (id != booking.BookingID)
             {
@@ -123,6 +122,8 @@ namespace HotelApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["GuestId"] = new SelectList(_context.Users, "Id", "Id", booking.GuestId);
+            ViewData["RoomID"] = new SelectList(_context.Room, "RoomID", "RoomID", booking.RoomID);
             return View(booking);
         }
 
@@ -135,6 +136,8 @@ namespace HotelApplication.Controllers
             }
 
             var booking = await _context.Booking
+                .Include(b => b.Guest)
+                .Include(b => b.Room)
                 .SingleOrDefaultAsync(m => m.BookingID == id);
             if (booking == null)
             {

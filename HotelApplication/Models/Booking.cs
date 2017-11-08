@@ -6,7 +6,6 @@ namespace HotelApplication.Models
     // Search by registred Email 
     public class Booking
     {
-        [Display(Name = "ID nummer boeking")]
         public int BookingID { get; set; }
 
         public Room Room { get; set; }

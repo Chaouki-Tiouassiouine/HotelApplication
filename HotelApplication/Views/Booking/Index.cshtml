@@ -9,19 +9,11 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
-<form asp-controller="Booking" asp-action="Index">
-    <p>
-        Title: <input type="text" name="SearchString">
-        <input type="submit" value="Zoek" />
-    </p>
-</form>
-
 <table class="table">
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.GuestId)
+                    @Html.DisplayNameFor(model => model.PaidBooking)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.StartDate)
@@ -29,21 +21,18 @@
                 <th>
                     @Html.DisplayNameFor(model => model.EndTime)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.RoomID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PaidBooking)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Guest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Room)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoomID)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PaidBooking)
             </td>
@@ -52,6 +41,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Guest.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Room.RoomID)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.BookingID">Edit</a> |
