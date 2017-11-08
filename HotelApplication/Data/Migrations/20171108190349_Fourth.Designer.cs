@@ -11,9 +11,10 @@ using System;
 namespace HotelApplication.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171108190349_Fourth")]
+    partial class Fourth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,10 +83,8 @@ namespace HotelApplication.Data.Migrations
 
                     b.Property<DateTime>("EndTime");
 
-                    b.Property<string>("FullName")
+                    b.Property<string>("GuestId")
                         .IsRequired();
-
-                    b.Property<string>("GuestId");
 
                     b.Property<bool>("PaidBooking");
 
@@ -232,7 +231,8 @@ namespace HotelApplication.Data.Migrations
                 {
                     b.HasOne("HotelApplication.Models.ApplicationUser", "Guest")
                         .WithMany()
-                        .HasForeignKey("GuestId");
+                        .HasForeignKey("GuestId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("HotelApplication.Models.Room", "Room")
                         .WithMany()

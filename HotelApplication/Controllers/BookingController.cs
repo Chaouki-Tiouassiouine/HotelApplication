@@ -49,7 +49,7 @@ namespace HotelApplication.Controllers
         // GET: Booking/Create
         public IActionResult Create()
         {
-            ViewData["GuestId"] = new SelectList(_context.Users, "Id", "UserName");
+            ViewData["GuestId"] = new SelectList(_context.Users, "Id", "FullName");
             ViewData["RoomID"] = new SelectList(_context.Room, "RoomID", "RoomName");
             return View();
         }
