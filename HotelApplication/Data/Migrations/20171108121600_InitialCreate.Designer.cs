@@ -11,9 +11,10 @@ using System;
 namespace HotelApplication.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171108121600_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,20 +79,13 @@ namespace HotelApplication.Data.Migrations
 
                     b.Property<DateTime>("EndTime");
 
-                    b.Property<string>("GuestId")
-                        .IsRequired();
-
                     b.Property<bool>("PaidBooking");
 
-                    b.Property<int>("RoomID");
+                    b.Property<string>("RoomID");
 
                     b.Property<DateTime>("StartDate");
 
                     b.HasKey("BookingID");
-
-                    b.HasIndex("GuestId");
-
-                    b.HasIndex("RoomID");
 
                     b.ToTable("Booking");
                 });
@@ -220,19 +214,6 @@ namespace HotelApplication.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("HotelApplication.Models.Booking", b =>
-                {
-                    b.HasOne("HotelApplication.Models.ApplicationUser", "Guest")
-                        .WithMany()
-                        .HasForeignKey("GuestId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("HotelApplication.Models.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomID")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
