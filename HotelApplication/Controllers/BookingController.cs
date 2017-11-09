@@ -14,6 +14,8 @@ namespace HotelApplication.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        public object PriceOfBooking { get; private set; }
+
         public BookingController(ApplicationDbContext context)
         {
             _context = context;
@@ -23,7 +25,20 @@ namespace HotelApplication.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Booking.Include(b => b.Guest).Include(b => b.Room);
+
+            foreach(Booking b in applicationDbContext)
+            {
+                b.TotalPrice = TotalPriceOfBooking(b, b.Room);
+            }
+
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        public double TotalPriceOfBooking(Booking booking, Room room)
+        {
+            var TotalPrice = (booking.EndDate - booking.StartDate).TotalDays * (double)room.RoomPrice;
+
+            return TotalPrice;
         }
 
         // GET: Booking/Details/5
@@ -59,7 +74,7 @@ namespace HotelApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookingID,RoomID,GuestId,PaidBooking,StartDate,EndTime")] Booking booking)
+        public async Task<IActionResult> Create([Bind("BookingID,RoomID,GuestId,PaidBooking,StartDate,EndDate")] Booking booking)
         {
             if (ModelState.IsValid)
             {
@@ -70,6 +85,7 @@ namespace HotelApplication.Controllers
             ViewData["GuestId"] = new SelectList(_context.Users, "Id", "Id", booking.GuestId);
             ViewData["RoomID"] = new SelectList(_context.Room, "RoomID", "RoomID", booking.RoomID);
             return View(booking);
+
         }
 
         // GET: Booking/Edit/5
@@ -95,7 +111,7 @@ namespace HotelApplication.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookingID,RoomID,GuestId,PaidBooking,StartDate,EndTime")] Booking booking)
+        public async Task<IActionResult> Edit(int id, [Bind("BookingID,RoomID,GuestId,PaidBooking,StartDate,EndDate,TotalPrice")] Booking booking)
         {
             if (id != booking.BookingID)
             {

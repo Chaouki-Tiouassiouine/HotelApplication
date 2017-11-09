@@ -9,20 +9,16 @@ namespace HotelApplication.Models.AccountViewModels
     public class RegisterViewModel
     {
 
-        [Required]
-        [Display(Name = "First Name")]
+        [Display(Name = "Voornaam"), Required (ErrorMessage = "Voornaam is verplicht")]
         public string FirstName { get; set; }
 
-        [Required]
-        [Display(Name = "Last Name")]
+        [Display(Name = "Achternaam"), Required (ErrorMessage = "Achternaam is verplicht")]
         public string LastName { get; set; }
 
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
+        [EmailAddress, Display(Name = "Email"), Required(ErrorMessage = "Email is verplicht")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Wachtwoord is verplicht")]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
